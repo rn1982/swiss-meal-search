@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+
 export default function Home() {
   return (
     <div className="container mx-auto px-4 py-8">
@@ -11,13 +14,36 @@ export default function Home() {
         
         <div className="bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-2xl font-semibold mb-6">Get Started</h2>
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 mb-6">
             Tell us about your preferences and we'll generate personalized, seasonal recipes
             with shopping lists for Swiss supermarkets.
           </p>
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
-            Start Meal Planning
-          </button>
+          <Link href="/preferences">
+            <Button size="lg" className="w-full sm:w-auto">
+              Start Meal Planning
+            </Button>
+          </Link>
+        </div>
+
+        <div className="mt-12 grid md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-lg p-6 shadow">
+            <h3 className="font-semibold text-lg mb-2">Seasonal Recipes</h3>
+            <p className="text-gray-600 text-sm">
+              Discover Swiss recipes that use fresh, seasonal ingredients
+            </p>
+          </div>
+          <div className="bg-white rounded-lg p-6 shadow">
+            <h3 className="font-semibold text-lg mb-2">Smart Shopping Lists</h3>
+            <p className="text-gray-600 text-sm">
+              Get organized lists with direct links to Migros & Coop
+            </p>
+          </div>
+          <div className="bg-white rounded-lg p-6 shadow">
+            <h3 className="font-semibold text-lg mb-2">Save Time</h3>
+            <p className="text-gray-600 text-sm">
+              Spend less time planning and more time enjoying meals
+            </p>
+          </div>
         </div>
       </div>
     </div>
