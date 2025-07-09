@@ -3,8 +3,5 @@
   "devCommand": "npm run dev",
   "installCommand": "npm install",
   "framework": "nextjs",
-  "regions": ["fra1"],
-  "env": {
-    "ANTHROPIC_API_KEY": "@anthropic-api-key"
-  }
+  "regions": ["fra1"]
 }
