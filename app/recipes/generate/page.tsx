@@ -149,16 +149,32 @@ export default function GenerateRecipesPage() {
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2">Ingredients:</h4>
                   <ul className="text-sm text-gray-600 space-y-1">
-                    {recipe.ingredients.slice(0, 5).map((ing, i) => (
+                    {recipe.ingredients?.slice(0, 5).map((ing, i) => (
                       <li key={i}>• {ing.quantity} {ing.unit} {ing.name}</li>
                     ))}
-                    {recipe.ingredients.length > 5 && (
+                    {recipe.ingredients?.length > 5 && (
                       <li className="text-gray-400">
                         ...and {recipe.ingredients.length - 5} more ingredients
                       </li>
                     )}
                   </ul>
                 </div>
+                
+                {recipe.instructions && recipe.instructions.length > 0 && (
+                  <div className="mb-4">
+                    <h4 className="font-semibold mb-2">Instructions:</h4>
+                    <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
+                      {recipe.instructions.slice(0, 3).map((step, i) => (
+                        <li key={i}>{step}</li>
+                      ))}
+                      {recipe.instructions.length > 3 && (
+                        <li className="text-gray-400">
+                          ...and {recipe.instructions.length - 3} more steps
+                        </li>
+                      )}
+                    </ol>
+                  </div>
+                )}
                 
                 {recipe.seasonalNote && (
                   <p className="text-sm text-green-600 italic">

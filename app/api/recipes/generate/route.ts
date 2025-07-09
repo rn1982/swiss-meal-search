@@ -33,17 +33,39 @@ export async function POST(request: NextRequest) {
     // Parse the JSON response
     let recipes
     try {
-      // Find JSON in the response
-      const jsonMatch = content.text.match(/\[[\s\S]*\]/)
-      if (jsonMatch) {
-        recipes = JSON.parse(jsonMatch[0])
-      } else {
-        throw new Error('No JSON found in response')
+      // Try to parse the entire response as JSON first
+      recipes = JSON.parse(content.text)
+    } catch (firstError) {
+      // If that fails, try to find JSON array in the response
+      try {
+        const jsonMatch = content.text.match(/\[[\s\S]*\]/)
+        if (jsonMatch) {
+          recipes = JSON.parse(jsonMatch[0])
+        } else {
+          throw new Error('No JSON found in response')
+        }
+      } catch (parseError) {
+        console.error('Failed to parse AI response:', content.text)
+        throw new Error('Failed to parse recipe data')
       }
-    } catch (parseError) {
-      console.error('Failed to parse AI response:', content.text)
-      throw new Error('Failed to parse recipe data')
     }
+    
+    // Validate recipe structure
+    if (!Array.isArray(recipes) || recipes.length === 0) {
+      throw new Error('Invalid recipe format')
+    }
+    
+    // Ensure all recipes have required fields
+    recipes = recipes.map(recipe => ({
+      title: recipe.title || 'Untitled Recipe',
+      description: recipe.description || '',
+      servings: recipe.servings || 2,
+      prepTime: recipe.prepTime || 15,
+      cookingTime: recipe.cookingTime || 30,
+      ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
+      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
+      seasonalNote: recipe.seasonalNote || ''
+    }))
     
     return NextResponse.json({ recipes })
   } catch (error) {

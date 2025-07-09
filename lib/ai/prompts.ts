@@ -1,7 +1,7 @@
 export function getRecipeGenerationPrompt(preferences: any) {
   const currentMonth = new Date().toLocaleString('en-US', { month: 'long' })
   
-  return `Generate 3 seasonal Swiss recipes for ${currentMonth}.
+  return `Generate exactly 3 seasonal Swiss recipes for ${currentMonth}.
 
 User preferences:
 - Household size: ${preferences.householdSize} people
@@ -17,16 +17,26 @@ Requirements:
 4. Match the cooking time and skill level
 5. Respect all dietary restrictions
 
-For each recipe, provide:
-- Title (in English)
-- Description (1-2 sentences)
-- Servings
-- Prep time and cooking time
-- List of ingredients with quantities
-- Step-by-step instructions
-- Why it's perfect for ${currentMonth} in Switzerland
+Return a JSON array with exactly 3 recipe objects. Each recipe MUST have this exact structure:
+{
+  "title": "Recipe Name",
+  "description": "1-2 sentence description",
+  "servings": 2,
+  "prepTime": 15,
+  "cookingTime": 30,
+  "ingredients": [
+    {"name": "ingredient name", "quantity": "200", "unit": "g"},
+    {"name": "another ingredient", "quantity": "1", "unit": "piece"}
+  ],
+  "instructions": ["Step 1: Do this", "Step 2: Do that"],
+  "seasonalNote": "Why this recipe is perfect for ${currentMonth} in Switzerland"
+}
 
-Format as JSON array with 3 recipes.`
+IMPORTANT: 
+- Return ONLY the JSON array, no other text
+- Each ingredient MUST have name, quantity, and unit properties
+- Include 6-10 ingredients per recipe
+- Include 4-8 instruction steps per recipe`
 }
 
 export function getIngredientExtractionPrompt(recipe: string) {
