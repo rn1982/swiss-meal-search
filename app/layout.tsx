@@ -5,8 +5,8 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Swiss Meal Search - AI-Powered Meal Planning',
-  description: 'Generate seasonal Swiss recipes and shopping lists with AI',
+  title: 'Swiss Meal Search - Planification de repas par IA',
+  description: 'Générez des recettes suisses saisonnières et des listes de courses avec l\'IA',
 }
 
 export default function RootLayout({

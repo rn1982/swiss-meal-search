@@ -81,7 +81,7 @@ export default function ShoppingListPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-semibold mb-4">Creating your shopping list...</h2>
+          <h2 className="text-2xl font-semibold mb-4">Création de votre liste de courses...</h2>
         </div>
       </div>
     )
@@ -91,18 +91,18 @@ export default function ShoppingListPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">Your Shopping List</h1>
+          <h1 className="text-3xl font-bold">Votre liste de courses</h1>
           <Button onClick={exportList} variant="outline">
             <Download className="h-4 w-4 mr-2" />
-            Export List
+            Exporter la liste
           </Button>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Ingredients</CardTitle>
+            <CardTitle>Ingrédients</CardTitle>
             <CardDescription>
-              Click on retailer links to search for items directly
+              Cliquez sur les liens des détaillants pour rechercher directement les articles
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -164,10 +164,10 @@ export default function ShoppingListPage() {
             variant="outline"
             onClick={() => router.push('/recipes/generate')}
           >
-            Back to recipes
+            Retour aux recettes
           </Button>
           <Button onClick={() => router.push('/')}>
-            Start new meal plan
+            Nouveau plan de repas
           </Button>
         </div>
       </div>

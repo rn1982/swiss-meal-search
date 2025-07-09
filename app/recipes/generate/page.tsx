@@ -56,7 +56,7 @@ export default function GenerateRecipesPage() {
       setRecipes(data.recipes)
       setIsLoading(false)
     } catch (err) {
-      setError('Failed to generate recipes. Please try again.')
+      setError('Échec de la génération des recettes. Veuillez réessayer.')
       setIsLoading(false)
     }
   }
@@ -81,8 +81,8 @@ export default function GenerateRecipesPage() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-semibold mb-4">Generating your personalized recipes...</h2>
-          <p className="text-gray-600">This may take a few moments</p>
+          <h2 className="text-2xl font-semibold mb-4">Génération de vos recettes personnalisées...</h2>
+          <p className="text-gray-600">Cela peut prendre quelques instants</p>
         </div>
       </div>
     )
@@ -94,7 +94,7 @@ export default function GenerateRecipesPage() {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl font-semibold mb-4 text-red-600">{error}</h2>
           <Button onClick={() => router.push('/preferences')}>
-            Back to preferences
+            Retour aux préférences
           </Button>
         </div>
       </div>
@@ -104,7 +104,7 @@ export default function GenerateRecipesPage() {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold mb-8">Your Seasonal Swiss Recipes</h1>
+        <h1 className="text-3xl font-bold mb-8">Vos recettes suisses de saison</h1>
         
         <div className="space-y-6 mb-8">
           {recipes.map((recipe, index) => (
@@ -138,23 +138,23 @@ export default function GenerateRecipesPage() {
                 <div className="flex gap-6 text-sm text-gray-600 mb-4">
                   <div className="flex items-center gap-1">
                     <Users className="h-4 w-4" />
-                    {recipe.servings} servings
+                    {recipe.servings} portions
                   </div>
                   <div className="flex items-center gap-1">
                     <Clock className="h-4 w-4" />
-                    {recipe.prepTime + recipe.cookingTime} min total
+                    {recipe.prepTime + recipe.cookingTime} min au total
                   </div>
                 </div>
                 
                 <div className="mb-4">
-                  <h4 className="font-semibold mb-2">Ingredients:</h4>
+                  <h4 className="font-semibold mb-2">Ingrédients:</h4>
                   <ul className="text-sm text-gray-600 space-y-1">
                     {recipe.ingredients?.slice(0, 5).map((ing, i) => (
                       <li key={i}>• {ing.quantity} {ing.unit} {ing.name}</li>
                     ))}
                     {recipe.ingredients?.length > 5 && (
                       <li className="text-gray-400">
-                        ...and {recipe.ingredients.length - 5} more ingredients
+                        ...et {recipe.ingredients.length - 5} autres ingrédients
                       </li>
                     )}
                   </ul>
@@ -169,7 +169,7 @@ export default function GenerateRecipesPage() {
                       ))}
                       {recipe.instructions.length > 3 && (
                         <li className="text-gray-400">
-                          ...and {recipe.instructions.length - 3} more steps
+                          ...et {recipe.instructions.length - 3} autres étapes
                         </li>
                       )}
                     </ol>
@@ -189,20 +189,20 @@ export default function GenerateRecipesPage() {
         <div className="sticky bottom-0 bg-white p-4 shadow-lg rounded-lg">
           <div className="flex justify-between items-center">
             <p className="text-gray-600">
-              {selectedRecipes.size} recipe{selectedRecipes.size !== 1 ? 's' : ''} selected
+              {selectedRecipes.size} recette{selectedRecipes.size !== 1 ? 's' : ''} sélectionnée{selectedRecipes.size !== 1 ? 's' : ''}
             </p>
             <div className="space-x-4">
               <Button 
                 variant="outline"
                 onClick={() => generateRecipes()}
               >
-                Generate new recipes
+                Générer de nouvelles recettes
               </Button>
               <Button 
                 onClick={proceedToShoppingList}
                 disabled={selectedRecipes.size === 0}
               >
-                Create shopping list
+                Créer la liste de courses
               </Button>
             </div>
           </div>

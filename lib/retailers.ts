@@ -2,8 +2,8 @@ export function generateRetailerLinks(ingredient: string) {
   const encodedIngredient = encodeURIComponent(ingredient)
   
   return {
-    migros: `https://www.migros.ch/en/search?query=${encodedIngredient}`,
-    coop: `https://www.coop.ch/en/search/?q=${encodedIngredient}`,
+    migros: `https://www.migros.ch/fr/search?query=${encodedIngredient}`,
+    coop: `https://www.coop.ch/fr/search/?q=${encodedIngredient}`,
   }
 }
 

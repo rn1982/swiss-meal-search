@@ -61,22 +61,22 @@ export default function PreferencesPage() {
       <div className="max-w-2xl mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Tell us about your preferences</CardTitle>
+            <CardTitle>Parlez-nous de vos préférences</CardTitle>
             <CardDescription>
-              Help us create the perfect meal plan for you
+              Aidez-nous à créer le plan de repas parfait pour vous
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
               <div className="space-y-2">
-                <Label htmlFor="householdSize">Household Size</Label>
+                <Label htmlFor="householdSize">Taille du ménage</Label>
                 <Select id="householdSize" {...register('householdSize')}>
-                  <option value="">Select household size</option>
-                  <option value="1">1 person</option>
-                  <option value="2">2 people</option>
-                  <option value="3">3 people</option>
-                  <option value="4">4 people</option>
-                  <option value="5">5+ people</option>
+                  <option value="">Sélectionnez la taille du ménage</option>
+                  <option value="1">1 personne</option>
+                  <option value="2">2 personnes</option>
+                  <option value="3">3 personnes</option>
+                  <option value="4">4 personnes</option>
+                  <option value="5">5+ personnes</option>
                 </Select>
                 {errors.householdSize && (
                   <p className="text-sm text-red-600">{errors.householdSize.message}</p>
@@ -84,12 +84,12 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="mealsPerDay">Meals per day</Label>
+                <Label htmlFor="mealsPerDay">Repas par jour</Label>
                 <Select id="mealsPerDay" {...register('mealsPerDay')}>
-                  <option value="">Select meals per day</option>
-                  <option value="1">1 meal</option>
-                  <option value="2">2 meals</option>
-                  <option value="3">3 meals</option>
+                  <option value="">Sélectionnez les repas par jour</option>
+                  <option value="1">1 repas</option>
+                  <option value="2">2 repas</option>
+                  <option value="3">3 repas</option>
                 </Select>
                 {errors.mealsPerDay && (
                   <p className="text-sm text-red-600">{errors.mealsPerDay.message}</p>
@@ -97,9 +97,9 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cookingTime">Maximum cooking time</Label>
+                <Label htmlFor="cookingTime">Temps de cuisson maximum</Label>
                 <Select id="cookingTime" {...register('cookingTime')}>
-                  <option value="">Select cooking time</option>
+                  <option value="">Sélectionnez le temps de cuisson</option>
                   <option value="15">15 minutes</option>
                   <option value="30">30 minutes</option>
                   <option value="45">45 minutes</option>
@@ -112,12 +112,12 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="skillLevel">Cooking skill level</Label>
+                <Label htmlFor="skillLevel">Niveau de compétence culinaire</Label>
                 <Select id="skillLevel" {...register('skillLevel')}>
-                  <option value="">Select skill level</option>
-                  <option value="beginner">Beginner</option>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
+                  <option value="">Sélectionnez le niveau</option>
+                  <option value="beginner">Débutant</option>
+                  <option value="intermediate">Intermédiaire</option>
+                  <option value="advanced">Avancé</option>
                 </Select>
                 {errors.skillLevel && (
                   <p className="text-sm text-red-600">{errors.skillLevel.message}</p>
@@ -125,17 +125,17 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label>Dietary needs (optional)</Label>
+                <Label>Besoins alimentaires (optionnel)</Label>
                 <div className="grid grid-cols-2 gap-3">
                   {[
-                    'Vegetarian',
-                    'Vegan',
-                    'No pork',
-                    'No beef',
-                    'Gluten-free',
-                    'Dairy-free',
-                    'Low-carb',
-                    'Pescatarian',
+                    'Végétarien',
+                    'Végétalien',
+                    'Sans porc',
+                    'Sans bœuf',
+                    'Sans gluten',
+                    'Sans lactose',
+                    'Faible en glucides',
+                    'Pescétarien',
                   ].map((need) => (
                     <label
                       key={need}
@@ -158,7 +158,7 @@ export default function PreferencesPage() {
                 className="w-full" 
                 disabled={isSubmitting}
               >
-                {isSubmitting ? 'Creating your meal plan...' : 'Generate meal plan'}
+                {isSubmitting ? 'Création de votre plan de repas...' : 'Générer le plan de repas'}
               </Button>
             </form>
           </CardContent>

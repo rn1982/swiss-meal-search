@@ -9,39 +9,39 @@ export default function Home() {
           Swiss Meal Search
         </h1>
         <p className="text-center text-lg text-gray-600 mb-12">
-          AI-powered meal planning for busy Swiss households
+          Planification de repas intelligente pour les ménages suisses occupés
         </p>
         
         <div className="bg-white rounded-lg shadow-lg p-8">
-          <h2 className="text-2xl font-semibold mb-6">Get Started</h2>
+          <h2 className="text-2xl font-semibold mb-6">Commencer</h2>
           <p className="text-gray-600 mb-6">
-            Tell us about your preferences and we'll generate personalized, seasonal recipes
-            with shopping lists for Swiss supermarkets.
+            Partagez vos préférences et nous générerons des recettes saisonnières personnalisées
+            avec des listes de courses pour les supermarchés suisses.
           </p>
           <Link href="/preferences">
             <Button size="lg" className="w-full sm:w-auto">
-              Start Meal Planning
+              Planifier mes repas
             </Button>
           </Link>
         </div>
 
         <div className="mt-12 grid md:grid-cols-3 gap-6">
           <div className="bg-white rounded-lg p-6 shadow">
-            <h3 className="font-semibold text-lg mb-2">Seasonal Recipes</h3>
+            <h3 className="font-semibold text-lg mb-2">Recettes saisonnières</h3>
             <p className="text-gray-600 text-sm">
-              Discover Swiss recipes that use fresh, seasonal ingredients
+              Découvrez des recettes suisses utilisant des ingrédients frais et de saison
             </p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow">
-            <h3 className="font-semibold text-lg mb-2">Smart Shopping Lists</h3>
+            <h3 className="font-semibold text-lg mb-2">Listes de courses intelligentes</h3>
             <p className="text-gray-600 text-sm">
-              Get organized lists with direct links to Migros & Coop
+              Obtenez des listes organisées avec liens directs vers Migros & Coop
             </p>
           </div>
           <div className="bg-white rounded-lg p-6 shadow">
-            <h3 className="font-semibold text-lg mb-2">Save Time</h3>
+            <h3 className="font-semibold text-lg mb-2">Gagnez du temps</h3>
             <p className="text-gray-600 text-sm">
-              Spend less time planning and more time enjoying meals
+              Passez moins de temps à planifier et plus de temps à savourer vos repas
             </p>
           </div>
         </div>

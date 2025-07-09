@@ -1,42 +1,57 @@
 export function getRecipeGenerationPrompt(preferences: any) {
-  const currentMonth = new Date().toLocaleString('en-US', { month: 'long' })
+  const currentMonth = new Date().toLocaleString('fr-FR', { month: 'long' })
   
-  return `Generate exactly 3 seasonal Swiss recipes for ${currentMonth}.
+  // Map dietary needs from French to English for the AI
+  const dietaryMap: any = {
+    'Végétarien': 'Vegetarian',
+    'Végétalien': 'Vegan',
+    'Sans porc': 'No pork',
+    'Sans bœuf': 'No beef',
+    'Sans gluten': 'Gluten-free',
+    'Sans lactose': 'Dairy-free',
+    'Faible en glucides': 'Low-carb',
+    'Pescétarien': 'Pescatarian'
+  }
+  
+  const dietaryNeeds = preferences.dietaryNeeds?.map((need: string) => dietaryMap[need] || need).join(', ') || 'Aucun'
+  
+  return `Générez exactement 3 recettes suisses saisonnières pour ${currentMonth} EN FRANÇAIS.
 
-User preferences:
-- Household size: ${preferences.householdSize} people
-- Meals per day: ${preferences.mealsPerDay}
-- Maximum cooking time: ${preferences.cookingTime} minutes
-- Skill level: ${preferences.skillLevel}
-- Dietary needs: ${preferences.dietaryNeeds?.join(', ') || 'None'}
+Préférences utilisateur:
+- Taille du ménage: ${preferences.householdSize} personnes
+- Repas par jour: ${preferences.mealsPerDay}
+- Temps de cuisson maximum: ${preferences.cookingTime} minutes
+- Niveau de compétence: ${preferences.skillLevel === 'beginner' ? 'débutant' : preferences.skillLevel === 'intermediate' ? 'intermédiaire' : 'avancé'}
+- Besoins alimentaires: ${dietaryNeeds}
 
-Requirements:
-1. Use ingredients commonly found in Swiss supermarkets (Migros, Coop)
-2. Emphasize seasonal, local Swiss produce for ${currentMonth}
-3. Provide clear, step-by-step instructions
-4. Match the cooking time and skill level
-5. Respect all dietary restrictions
+Exigences:
+1. Utilisez des ingrédients couramment trouvés dans les supermarchés suisses (Migros, Coop)
+2. Mettez l'accent sur les produits suisses locaux et de saison pour ${currentMonth}
+3. Fournissez des instructions claires, étape par étape
+4. Respectez le temps de cuisson et le niveau de compétence
+5. Respectez toutes les restrictions alimentaires
 
-Return a JSON array with exactly 3 recipe objects. Each recipe MUST have this exact structure:
+Retournez un tableau JSON avec exactement 3 objets de recette. Chaque recette DOIT avoir cette structure exacte (TOUT EN FRANÇAIS):
 {
-  "title": "Recipe Name",
-  "description": "1-2 sentence description",
+  "title": "Nom de la recette",
+  "description": "Description de 1-2 phrases",
   "servings": 2,
   "prepTime": 15,
   "cookingTime": 30,
   "ingredients": [
-    {"name": "ingredient name", "quantity": "200", "unit": "g"},
-    {"name": "another ingredient", "quantity": "1", "unit": "piece"}
+    {"name": "nom de l'ingrédient", "quantity": "200", "unit": "g"},
+    {"name": "autre ingrédient", "quantity": "1", "unit": "pièce"}
   ],
-  "instructions": ["Step 1: Do this", "Step 2: Do that"],
-  "seasonalNote": "Why this recipe is perfect for ${currentMonth} in Switzerland"
+  "instructions": ["Étape 1: Faites ceci", "Étape 2: Faites cela"],
+  "seasonalNote": "Pourquoi cette recette est parfaite pour ${currentMonth} en Suisse"
 }
 
 IMPORTANT: 
-- Return ONLY the JSON array, no other text
-- Each ingredient MUST have name, quantity, and unit properties
-- Include 6-10 ingredients per recipe
-- Include 4-8 instruction steps per recipe`
+- Retournez UNIQUEMENT le tableau JSON, aucun autre texte
+- Tous les textes doivent être en FRANÇAIS
+- Chaque ingrédient DOIT avoir les propriétés name, quantity et unit
+- Incluez 6-10 ingrédients par recette
+- Incluez 4-8 étapes d'instructions par recette`
 }
 
 export function getIngredientExtractionPrompt(recipe: string) {
