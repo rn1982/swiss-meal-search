@@ -64,16 +64,30 @@ export async function POST(request: NextRequest) {
       throw new Error('Invalid recipe format')
     }
     
-    // Ensure all recipes have required fields
-    recipes = recipes.map(recipe => ({
-      title: recipe.title || 'Untitled Recipe',
-      description: recipe.description || '',
-      servings: recipe.servings || 2,
-      prepTime: recipe.prepTime || 15,
-      cookingTime: recipe.cookingTime || 30,
-      ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
-      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : []
-    }))
+    // Ensure all recipes have required fields and respect time constraints
+    const maxTime = parseInt(preferences.cookingTime) || 60
+    recipes = recipes.map(recipe => {
+      const prepTime = recipe.prepTime || 15
+      const cookingTime = recipe.cookingTime || 30
+      const totalTime = prepTime + cookingTime
+      
+      // If total time exceeds max, adjust proportionally
+      if (totalTime > maxTime) {
+        const ratio = maxTime / totalTime
+        recipe.prepTime = Math.floor(prepTime * ratio)
+        recipe.cookingTime = Math.floor(cookingTime * ratio)
+      }
+      
+      return {
+        title: recipe.title || 'Untitled Recipe',
+        description: recipe.description || '',
+        servings: parseInt(preferences.householdSize) || recipe.servings || 2,
+        prepTime: recipe.prepTime || 15,
+        cookingTime: recipe.cookingTime || 30,
+        ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
+        instructions: Array.isArray(recipe.instructions) ? recipe.instructions : []
+      }
+    })
     
     return NextResponse.json({ recipes })
   } catch (error) {

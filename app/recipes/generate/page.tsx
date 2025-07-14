@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Clock, Users, ChefHat, Download } from 'lucide-react'
+import { Clock, Users, ChefHat } from 'lucide-react'
 
 interface Recipe {
   title: string
@@ -28,11 +28,29 @@ export default function GenerateRecipesPage() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Check if we have cached recipes first
+    const cachedRecipes = sessionStorage.getItem('generatedRecipes')
+    if (cachedRecipes) {
+      try {
+        const parsed = JSON.parse(cachedRecipes)
+        setRecipes(parsed)
+        setIsLoading(false)
+        return
+      } catch (e) {
+        // If parsing fails, generate new recipes
+        console.error('Failed to parse cached recipes:', e)
+      }
+    }
+    // No cached recipes, generate new ones
     generateRecipes()
   }, [])
 
   const generateRecipes = async () => {
     try {
+      // Clear the cache when manually generating new recipes
+      sessionStorage.removeItem('generatedRecipes')
+      setIsLoading(true)
+      
       const preferencesStr = sessionStorage.getItem('userPreferences')
       if (!preferencesStr) {
         router.push('/preferences')
@@ -54,6 +72,8 @@ export default function GenerateRecipesPage() {
       }
 
       setRecipes(data.recipes)
+      // Cache the generated recipes
+      sessionStorage.setItem('generatedRecipes', JSON.stringify(data.recipes))
       setIsLoading(false)
     } catch (err) {
       console.error('Recipe generation error:', err)
@@ -79,40 +99,6 @@ export default function GenerateRecipesPage() {
     router.push('/shopping-list')
   }
 
-  const exportSelectedRecipes = () => {
-    const selected = Array.from(selectedRecipes).map(i => recipes[i])
-    if (selected.length === 0) return
-
-    let recipeText = 'RECETTES SÉLECTIONNÉES\n\n'
-    
-    selected.forEach((recipe, index) => {
-      recipeText += `${index + 1}. ${recipe.title}\n`
-      recipeText += `${recipe.description}\n\n`
-      recipeText += `Portions: ${recipe.servings}\n`
-      recipeText += `Temps de préparation: ${recipe.prepTime} min\n`
-      recipeText += `Temps de cuisson: ${recipe.cookingTime} min\n\n`
-      
-      recipeText += 'INGRÉDIENTS:\n'
-      recipe.ingredients.forEach(ing => {
-        recipeText += `- ${ing.quantity} ${ing.unit} ${ing.name}\n`
-      })
-      
-      recipeText += '\nINSTRUCTIONS:\n'
-      recipe.instructions.forEach((step, i) => {
-        recipeText += `${i + 1}. ${step}\n`
-      })
-      
-      recipeText += '\n' + '='.repeat(50) + '\n\n'
-    })
-    
-    const blob = new Blob([recipeText], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `recettes-${new Date().toISOString().split('T')[0]}.txt`
-    a.click()
-    URL.revokeObjectURL(url)
-  }
 
   if (isLoading) {
     return (
@@ -218,14 +204,6 @@ export default function GenerateRecipesPage() {
                 onClick={() => generateRecipes()}
               >
                 Générer de nouvelles recettes
-              </Button>
-              <Button 
-                variant="outline"
-                onClick={exportSelectedRecipes}
-                disabled={selectedRecipes.size === 0}
-              >
-                <Download className="h-4 w-4 mr-2" />
-                Exporter les recettes
               </Button>
               <Button 
                 onClick={proceedToShoppingList}

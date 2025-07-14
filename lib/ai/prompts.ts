@@ -1,6 +1,9 @@
 export function getRecipeGenerationPrompt(preferences: any) {
   const currentMonth = new Date().toLocaleString('fr-FR', { month: 'long' })
   
+  // Calculate number of recipes needed for 5 days
+  const recipesNeeded = parseInt(preferences.mealsPerDay) * 5
+  
   // Map dietary needs from French to English for the AI
   const dietaryMap: any = {
     'Végétarien': 'Vegetarian',
@@ -12,35 +15,39 @@ export function getRecipeGenerationPrompt(preferences: any) {
   
   const dietaryNeeds = preferences.dietaryNeeds?.map((need: string) => dietaryMap[need] || need).join(', ') || 'Aucun'
   
-  return `Générez exactement 6 recettes suisses VARIÉES et saisonnières pour ${currentMonth} EN FRANÇAIS. IMPORTANT: Assurez une grande diversité dans les types de plats (entrées, plats principaux, accompagnements), les techniques de cuisson et les ingrédients principaux.
+  return `Générez exactement ${recipesNeeded} recettes suisses VARIÉES et saisonnières pour ${currentMonth} EN FRANÇAIS. IMPORTANT: Assurez une grande diversité dans les types de plats (entrées, plats principaux, accompagnements), les techniques de cuisson et les ingrédients principaux.
 
 Préférences utilisateur:
 - Taille du ménage: ${preferences.householdSize} personnes
 - Repas par jour: ${preferences.mealsPerDay}
-- Temps de cuisson maximum: ${preferences.cookingTime} minutes
+- Temps de préparation TOTAL maximum: ${preferences.cookingTime} minutes
 - Niveau de compétence: ${preferences.skillLevel === 'beginner' ? 'débutant' : preferences.skillLevel === 'intermediate' ? 'intermédiaire' : 'avancé'}
 - Besoins alimentaires: ${dietaryNeeds}
 
-Exigences:
-1. Utilisez des ingrédients couramment trouvés dans les supermarchés suisses (Migros, Coop)
-2. Mettez l'accent sur les produits suisses locaux et de saison pour ${currentMonth}
-3. Fournissez des instructions claires, étape par étape
-4. Respectez le temps de cuisson et le niveau de compétence
-5. Respectez toutes les restrictions alimentaires
+Exigences CRITIQUES:
+1. CHAQUE recette DOIT avoir un temps TOTAL (prepTime + cookingTime) ≤ ${preferences.cookingTime} minutes
+2. Les portions DOIVENT être pour ${preferences.householdSize} personne(s)
+3. Utilisez des ingrédients couramment trouvés dans les supermarchés suisses (Migros, Coop)
+4. Mettez l'accent sur les produits suisses locaux et de saison pour ${currentMonth}
+5. Fournissez des instructions claires, étape par étape
+6. Respectez STRICTEMENT le temps maximum et le niveau de compétence
+7. Respectez toutes les restrictions alimentaires
 
-Retournez un tableau JSON avec exactement 6 objets de recette. Chaque recette DOIT avoir cette structure exacte (TOUT EN FRANÇAIS):
+Retournez un tableau JSON avec exactement ${recipesNeeded} objets de recette. Chaque recette DOIT avoir cette structure exacte (TOUT EN FRANÇAIS):
 {
   "title": "Nom de la recette",
   "description": "Description de 1-2 phrases",
-  "servings": 2,
-  "prepTime": 15,
-  "cookingTime": 30,
+  "servings": ${preferences.householdSize},
+  "prepTime": 10,
+  "cookingTime": 20,
   "ingredients": [
     {"name": "nom de l'ingrédient", "quantity": "200", "unit": "g"},
     {"name": "autre ingrédient", "quantity": "1", "unit": "pièce"}
   ],
   "instructions": ["Étape 1: Faites ceci", "Étape 2: Faites cela"]
 }
+
+RAPPEL CRITIQUE: prepTime + cookingTime DOIT être ≤ ${preferences.cookingTime} minutes pour CHAQUE recette!
 
 IMPORTANT: 
 - Retournez UNIQUEMENT le tableau JSON, aucun autre texte

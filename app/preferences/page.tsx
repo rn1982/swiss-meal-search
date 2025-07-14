@@ -44,6 +44,9 @@ export default function PreferencesPage() {
     }
     sessionStorage.setItem('userPreferences', JSON.stringify(preferences))
     
+    // Clear cached recipes when preferences change
+    sessionStorage.removeItem('generatedRecipes')
+    
     // Navigate to recipe generation
     router.push('/recipes/generate')
   }
@@ -84,12 +87,12 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="mealsPerDay">Repas par jour</Label>
+                <Label htmlFor="mealsPerDay">Repas par jour (pour 5 jours)</Label>
                 <Select id="mealsPerDay" {...register('mealsPerDay')}>
                   <option value="">Sélectionnez les repas par jour</option>
-                  <option value="1">1 repas</option>
-                  <option value="2">2 repas</option>
-                  <option value="3">3 repas</option>
+                  <option value="1">1 repas/jour (5 recettes total)</option>
+                  <option value="2">2 repas/jour (10 recettes total)</option>
+                  <option value="3">3 repas/jour (15 recettes total)</option>
                 </Select>
                 {errors.mealsPerDay && (
                   <p className="text-sm text-red-600">{errors.mealsPerDay.message}</p>
