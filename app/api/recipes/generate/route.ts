@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const prompt = getRecipeGenerationPrompt(preferences)
     
     const response = await anthropic.messages.create({
-      model: 'claude-3-haiku-20240307',
+      model: 'claude-3-5-haiku-20241022',
       max_tokens: 8000,
       temperature: 0.8,
       messages: [
