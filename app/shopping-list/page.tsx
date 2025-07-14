@@ -68,11 +68,47 @@ export default function ShoppingListPage() {
       .map(ing => `${ing.quantity} ${ing.unit} ${ing.name}`)
       .join('\n')
     
-    const blob = new Blob([listText], { type: 'text/plain' })
+    const blob = new Blob([listText], { type: 'text/plain;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = 'shopping-list.txt'
+    a.download = `liste-courses-${new Date().toISOString().split('T')[0]}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const exportRecipes = () => {
+    const recipesStr = sessionStorage.getItem('selectedRecipes')
+    if (!recipesStr) return
+    
+    const recipes = JSON.parse(recipesStr)
+    let recipeText = 'RECETTES SÉLECTIONNÉES\n\n'
+    
+    recipes.forEach((recipe: any, index: number) => {
+      recipeText += `${index + 1}. ${recipe.title}\n`
+      recipeText += `${recipe.description}\n\n`
+      recipeText += `Portions: ${recipe.servings}\n`
+      recipeText += `Temps de préparation: ${recipe.prepTime} min\n`
+      recipeText += `Temps de cuisson: ${recipe.cookingTime} min\n\n`
+      
+      recipeText += 'INGRÉDIENTS:\n'
+      recipe.ingredients.forEach((ing: any) => {
+        recipeText += `- ${ing.quantity} ${ing.unit} ${ing.name}\n`
+      })
+      
+      recipeText += '\nINSTRUCTIONS:\n'
+      recipe.instructions.forEach((step: string, i: number) => {
+        recipeText += `${i + 1}. ${step}\n`
+      })
+      
+      recipeText += '\n' + '='.repeat(50) + '\n\n'
+    })
+    
+    const blob = new Blob([recipeText], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `recettes-${new Date().toISOString().split('T')[0]}.txt`
     a.click()
     URL.revokeObjectURL(url)
   }
@@ -92,10 +128,16 @@ export default function ShoppingListPage() {
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold">Votre liste de courses</h1>
-          <Button onClick={exportList} variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            Exporter la liste
-          </Button>
+          <div className="space-x-2">
+            <Button onClick={exportRecipes} variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Exporter les recettes
+            </Button>
+            <Button onClick={exportList} variant="outline">
+              <Download className="h-4 w-4 mr-2" />
+              Exporter la liste
+            </Button>
+          </div>
         </div>
 
         <Card>

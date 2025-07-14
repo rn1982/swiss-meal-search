@@ -6,16 +6,13 @@ export function getRecipeGenerationPrompt(preferences: any) {
     'Végétarien': 'Vegetarian',
     'Végétalien': 'Vegan',
     'Sans porc': 'No pork',
-    'Sans bœuf': 'No beef',
     'Sans gluten': 'Gluten-free',
     'Sans lactose': 'Dairy-free',
-    'Faible en glucides': 'Low-carb',
-    'Pescétarien': 'Pescatarian'
   }
   
   const dietaryNeeds = preferences.dietaryNeeds?.map((need: string) => dietaryMap[need] || need).join(', ') || 'Aucun'
   
-  return `Générez exactement 3 recettes suisses saisonnières pour ${currentMonth} EN FRANÇAIS.
+  return `Générez exactement 6 recettes suisses VARIÉES et saisonnières pour ${currentMonth} EN FRANÇAIS. IMPORTANT: Assurez une grande diversité dans les types de plats (entrées, plats principaux, accompagnements), les techniques de cuisson et les ingrédients principaux.
 
 Préférences utilisateur:
 - Taille du ménage: ${preferences.householdSize} personnes
@@ -31,7 +28,7 @@ Exigences:
 4. Respectez le temps de cuisson et le niveau de compétence
 5. Respectez toutes les restrictions alimentaires
 
-Retournez un tableau JSON avec exactement 3 objets de recette. Chaque recette DOIT avoir cette structure exacte (TOUT EN FRANÇAIS):
+Retournez un tableau JSON avec exactement 6 objets de recette. Chaque recette DOIT avoir cette structure exacte (TOUT EN FRANÇAIS):
 {
   "title": "Nom de la recette",
   "description": "Description de 1-2 phrases",
@@ -42,8 +39,7 @@ Retournez un tableau JSON avec exactement 3 objets de recette. Chaque recette DO
     {"name": "nom de l'ingrédient", "quantity": "200", "unit": "g"},
     {"name": "autre ingrédient", "quantity": "1", "unit": "pièce"}
   ],
-  "instructions": ["Étape 1: Faites ceci", "Étape 2: Faites cela"],
-  "seasonalNote": "Pourquoi cette recette est parfaite pour ${currentMonth} en Suisse"
+  "instructions": ["Étape 1: Faites ceci", "Étape 2: Faites cela"]
 }
 
 IMPORTANT: 

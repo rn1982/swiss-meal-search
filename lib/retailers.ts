@@ -3,7 +3,7 @@ export function generateRetailerLinks(ingredient: string) {
   
   return {
     migros: `https://www.migros.ch/fr/search?query=${encodedIngredient}`,
-    coop: `https://www.coop.ch/fr/search/?q=${encodedIngredient}`,
+    coop: `https://www.coop.ch/fr/search/?text=${encodedIngredient}`,
   }
 }
 

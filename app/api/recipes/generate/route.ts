@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
     
     const response = await anthropic.messages.create({
       model: 'claude-3-haiku-20240307',
-      max_tokens: 4000,
-      temperature: 0.7,
+      max_tokens: 8000,
+      temperature: 0.8,
       messages: [
         {
           role: 'user',
@@ -63,8 +63,7 @@ export async function POST(request: NextRequest) {
       prepTime: recipe.prepTime || 15,
       cookingTime: recipe.cookingTime || 30,
       ingredients: Array.isArray(recipe.ingredients) ? recipe.ingredients : [],
-      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : [],
-      seasonalNote: recipe.seasonalNote || ''
+      instructions: Array.isArray(recipe.instructions) ? recipe.instructions : []
     }))
     
     return NextResponse.json({ recipes })

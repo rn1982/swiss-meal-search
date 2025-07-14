@@ -97,9 +97,9 @@ export default function PreferencesPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="cookingTime">Temps de cuisson maximum</Label>
+                <Label htmlFor="cookingTime">Durée de préparation maximum</Label>
                 <Select id="cookingTime" {...register('cookingTime')}>
-                  <option value="">Sélectionnez le temps de cuisson</option>
+                  <option value="">Sélectionnez la durée de préparation</option>
                   <option value="15">15 minutes</option>
                   <option value="30">30 minutes</option>
                   <option value="45">45 minutes</option>
@@ -131,11 +131,8 @@ export default function PreferencesPage() {
                     'Végétarien',
                     'Végétalien',
                     'Sans porc',
-                    'Sans bœuf',
                     'Sans gluten',
                     'Sans lactose',
-                    'Faible en glucides',
-                    'Pescétarien',
                   ].map((need) => (
                     <label
                       key={need}

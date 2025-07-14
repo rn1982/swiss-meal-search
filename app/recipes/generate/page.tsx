@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Clock, Users, ChefHat } from 'lucide-react'
+import { Clock, Users, ChefHat, Download } from 'lucide-react'
 
 interface Recipe {
   title: string
@@ -18,7 +18,6 @@ interface Recipe {
     unit: string
   }>
   instructions: string[]
-  seasonalNote: string
 }
 
 export default function GenerateRecipesPage() {
@@ -75,6 +74,41 @@ export default function GenerateRecipesPage() {
     const selected = Array.from(selectedRecipes).map(i => recipes[i])
     sessionStorage.setItem('selectedRecipes', JSON.stringify(selected))
     router.push('/shopping-list')
+  }
+
+  const exportSelectedRecipes = () => {
+    const selected = Array.from(selectedRecipes).map(i => recipes[i])
+    if (selected.length === 0) return
+
+    let recipeText = 'RECETTES SÉLECTIONNÉES\n\n'
+    
+    selected.forEach((recipe, index) => {
+      recipeText += `${index + 1}. ${recipe.title}\n`
+      recipeText += `${recipe.description}\n\n`
+      recipeText += `Portions: ${recipe.servings}\n`
+      recipeText += `Temps de préparation: ${recipe.prepTime} min\n`
+      recipeText += `Temps de cuisson: ${recipe.cookingTime} min\n\n`
+      
+      recipeText += 'INGRÉDIENTS:\n'
+      recipe.ingredients.forEach(ing => {
+        recipeText += `- ${ing.quantity} ${ing.unit} ${ing.name}\n`
+      })
+      
+      recipeText += '\nINSTRUCTIONS:\n'
+      recipe.instructions.forEach((step, i) => {
+        recipeText += `${i + 1}. ${step}\n`
+      })
+      
+      recipeText += '\n' + '='.repeat(50) + '\n\n'
+    })
+    
+    const blob = new Blob([recipeText], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = `recettes-${new Date().toISOString().split('T')[0]}.txt`
+    a.click()
+    URL.revokeObjectURL(url)
   }
 
   if (isLoading) {
@@ -149,14 +183,9 @@ export default function GenerateRecipesPage() {
                 <div className="mb-4">
                   <h4 className="font-semibold mb-2">Ingrédients:</h4>
                   <ul className="text-sm text-gray-600 space-y-1">
-                    {recipe.ingredients?.slice(0, 5).map((ing, i) => (
+                    {recipe.ingredients?.map((ing, i) => (
                       <li key={i}>• {ing.quantity} {ing.unit} {ing.name}</li>
                     ))}
-                    {recipe.ingredients?.length > 5 && (
-                      <li className="text-gray-400">
-                        ...et {recipe.ingredients.length - 5} autres ingrédients
-                      </li>
-                    )}
                   </ul>
                 </div>
                 
@@ -164,22 +193,11 @@ export default function GenerateRecipesPage() {
                   <div className="mb-4">
                     <h4 className="font-semibold mb-2">Instructions:</h4>
                     <ol className="text-sm text-gray-600 space-y-1 list-decimal list-inside">
-                      {recipe.instructions.slice(0, 3).map((step, i) => (
+                      {recipe.instructions.map((step, i) => (
                         <li key={i}>{step}</li>
                       ))}
-                      {recipe.instructions.length > 3 && (
-                        <li className="text-gray-400">
-                          ...et {recipe.instructions.length - 3} autres étapes
-                        </li>
-                      )}
                     </ol>
                   </div>
-                )}
-                
-                {recipe.seasonalNote && (
-                  <p className="text-sm text-green-600 italic">
-                    {recipe.seasonalNote}
-                  </p>
                 )}
               </CardContent>
             </Card>
@@ -197,6 +215,14 @@ export default function GenerateRecipesPage() {
                 onClick={() => generateRecipes()}
               >
                 Générer de nouvelles recettes
+              </Button>
+              <Button 
+                variant="outline"
+                onClick={exportSelectedRecipes}
+                disabled={selectedRecipes.size === 0}
+              >
+                <Download className="h-4 w-4 mr-2" />
+                Exporter les recettes
               </Button>
               <Button 
                 onClick={proceedToShoppingList}
