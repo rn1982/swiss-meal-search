@@ -8,6 +8,15 @@ const anthropic = new Anthropic({
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if API key exists
+    if (!process.env.ANTHROPIC_API_KEY) {
+      console.error('ANTHROPIC_API_KEY is not set')
+      return NextResponse.json(
+        { error: 'API key not configured' },
+        { status: 500 }
+      )
+    }
+    
     const preferences = await request.json()
     
     const prompt = getRecipeGenerationPrompt(preferences)
@@ -69,6 +78,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ recipes })
   } catch (error) {
     console.error('Recipe generation error:', error)
+    
+    // More specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('API key')) {
+        return NextResponse.json(
+          { error: 'API key error: ' + error.message },
+          { status: 500 }
+        )
+      }
+      if (error.message.includes('rate limit')) {
+        return NextResponse.json(
+          { error: 'Rate limit exceeded. Please try again later.' },
+          { status: 429 }
+        )
+      }
+      return NextResponse.json(
+        { error: 'Error: ' + error.message },
+        { status: 500 }
+      )
+    }
+    
     return NextResponse.json(
       { error: 'Failed to generate recipes' },
       { status: 500 }

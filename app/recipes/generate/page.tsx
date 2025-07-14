@@ -47,15 +47,18 @@ export default function GenerateRecipesPage() {
         body: JSON.stringify(preferences),
       })
 
+      const data = await response.json()
+      
       if (!response.ok) {
-        throw new Error('Failed to generate recipes')
+        throw new Error(data.error || 'Failed to generate recipes')
       }
 
-      const data = await response.json()
       setRecipes(data.recipes)
       setIsLoading(false)
     } catch (err) {
-      setError('Échec de la génération des recettes. Veuillez réessayer.')
+      console.error('Recipe generation error:', err)
+      const errorMessage = err instanceof Error ? err.message : 'Échec de la génération des recettes'
+      setError(`Erreur: ${errorMessage}`)
       setIsLoading(false)
     }
   }
